@@ -1,80 +1,229 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import {
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
-export const Route = createFileRoute("/cadastro")({
-  head: () => ({
-    meta: [
-      { title: "Cadastrar — Crie sua conta" },
-      { name: "description", content: "Crie sua conta informando CPF, nome, data de nascimento, email e senha." },
-      { property: "og:title", content: "Cadastrar — Crie sua conta" },
-      { property: "og:description", content: "Crie sua conta informando CPF, nome, data de nascimento, email e senha." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: CadastroPage,
-});
+export default function CadastroScreen() {
+  const router = useRouter();
 
-const campos = [
-  { id: "cpf", label: "CPF", type: "text", autoComplete: "off" },
-  { id: "nome", label: "Nome", type: "text", autoComplete: "name" },
-  { id: "nascimento", label: "Data de Nascimento", type: "date", autoComplete: "bday" },
-  { id: "email", label: "Email", type: "email", autoComplete: "email" },
-  { id: "senha", label: "Senha", type: "password", autoComplete: "new-password" },
-  { id: "confirma", label: "Confirma Senha", type: "password", autoComplete: "new-password" },
-] as const;
+  const [cpf, setCpf] = useState('');
+  const [nome, setNome] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
-function CadastroPage() {
-  const [dados, setDados] = useState<Record<string, string>>({});
-  const [erro, setErro] = useState("");
+  const handleCadastro = () => {
+    console.log({
+      cpf,
+      nome,
+      dataNascimento,
+      email,
+      senha,
+    });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (dados["senha"] !== dados["confirma"]) {
-      setErro("As senhas não coincidem.");
-      return;
-    }
-    setErro("");
-    console.log("Cadastro:", dados);
+    // Depois podemos colocar aqui o cadastro no Firebase/API.
+  };
+
+  const handleVoltar = () => {
+    router.back();
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-5 py-8">
-      <div className="w-full max-w-sm">
-        <div className="mb-4 flex items-center gap-3">
-          <Link to="/" aria-label="Voltar" className="text-2xl font-black text-foreground hover:opacity-80">
-            ←
-          </Link>
-          <h1 className="text-3xl font-black text-foreground">Cadastrar</h1>
-        </div>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="#140A26"
+      />
 
-        <form onSubmit={handleSubmit}>
-          {campos.map((c) => (
-            <div key={c.id} className="mb-3">
-              <label htmlFor={c.id} className="mb-1 block text-sm font-extrabold text-foreground">
-                {c.label}
-              </label>
-              <input
-                id={c.id}
-                type={c.type}
-                autoComplete={c.autoComplete}
-                value={dados[c.id] ?? ""}
-                onChange={(e) => setDados({ ...dados, [c.id]: e.target.value })}
-                className="h-10 w-full rounded-md bg-secondary px-3 text-[15px] text-secondary-foreground outline-none focus:ring-2 focus:ring-ring"
-              />
-            </div>
-          ))}
+      <ScrollView
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={styles.title}>
+          CRIE SUA CONTA
+        </Text>
 
-          {erro && <p className="text-sm font-semibold text-destructive">{erro}</p>}
+        <View style={styles.form}>
 
-          <button
-            type="submit"
-            className="mt-5 h-11 w-full rounded-md bg-primary text-base font-black tracking-widest text-primary-foreground transition-opacity hover:opacity-90"
+          {/* CPF */}
+          <Text style={styles.label}>CPF</Text>
+
+          <TextInput
+            style={styles.input}
+            value={cpf}
+            onChangeText={setCpf}
+            keyboardType="numeric"
+            placeholder="Digite seu CPF"
+            placeholderTextColor="#777"
+            maxLength={11}
+          />
+
+          {/* NOME */}
+          <Text style={styles.label}>
+            Nome completo
+          </Text>
+
+          <TextInput
+            style={styles.input}
+            value={nome}
+            onChangeText={setNome}
+            placeholder="Digite seu nome completo"
+            placeholderTextColor="#777"
+            autoCapitalize="words"
+          />
+
+          {/* DATA DE NASCIMENTO */}
+          <Text style={styles.label}>
+            Data de nascimento
+          </Text>
+
+          <TextInput
+            style={styles.input}
+            value={dataNascimento}
+            onChangeText={setDataNascimento}
+            placeholder="DD/MM/AAAA"
+            placeholderTextColor="#777"
+            keyboardType="numeric"
+            maxLength={10}
+          />
+
+          {/* EMAIL */}
+          <Text style={styles.label}>
+            Email
+          </Text>
+
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Digite seu email"
+            placeholderTextColor="#777"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+
+          {/* SENHA */}
+          <Text style={styles.label}>
+            Senha
+          </Text>
+
+          <TextInput
+            style={styles.input}
+            value={senha}
+            onChangeText={setSenha}
+            placeholder="Crie uma senha"
+            placeholderTextColor="#777"
+            secureTextEntry
+            autoCapitalize="none"
+          />
+
+          {/* BOTÃO CADASTRAR */}
+          <TouchableOpacity
+            style={styles.cadastroButton}
+            onPress={handleCadastro}
+            activeOpacity={0.85}
           >
-            CADASTRAR
-          </button>
-        </form>
-      </div>
-    </main>
+            <Text style={styles.cadastroButtonText}>
+              CADASTRAR
+            </Text>
+          </TouchableOpacity>
+
+          {/* VOLTAR */}
+          <TouchableOpacity
+            style={styles.voltarButton}
+            onPress={handleVoltar}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.voltarText}>
+              Voltar para o login
+            </Text>
+          </TouchableOpacity>
+
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#140A26',
+  },
+
+  content: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 32,
+  },
+
+  title: {
+    color: '#FFFFFF',
+    fontSize: 28,
+    fontWeight: '900',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+
+  form: {
+    width: '100%',
+  },
+
+  label: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '800',
+    marginBottom: 6,
+    marginTop: 14,
+  },
+
+  input: {
+    height: 44,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 15,
+    color: '#000000',
+  },
+
+  cadastroButton: {
+    marginTop: 30,
+    height: 44,
+    backgroundColor: '#FF6A00',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  cadastroButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 1,
+  },
+
+  voltarButton: {
+    alignItems: 'center',
+    marginTop: 18,
+  },
+
+  voltarText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+});

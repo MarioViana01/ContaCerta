@@ -1,98 +1,190 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AntDesign } from '@expo/vector-icons'; // npx expo install @expo/vector-icons
+import { useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export default function LoginScreen() {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+  const handleLogin = () => {
+    // TODO: chamar sua API / Firebase aqui
+    console.log('Login:', email, senha);
+  };
+
+  const handleCadastrar = () => {
+    // TODO: navigation.navigate('Cadastro');
+  };
+
+  const handleEsqueceuSenha = () => {
+    // TODO: navigation.navigate('RecuperarSenha');
+  };
+
+  const handleGoogle = () => {
+    // TODO: login com Google
+  };
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <StatusBar barStyle="light-content" backgroundColor="#140A26" />
+      <ScrollView
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={styles.title}>BEM-VINDO</Text>
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            ContaCerta
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+        <View style={styles.form}>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+          <Text style={[styles.label, styles.labelSpacing]}>Senha</Text>
+          <TextInput
+            style={styles.input}
+            value={senha}
+            onChangeText={setSenha}
+            secureTextEntry
+            autoCapitalize="none"
+          />
+
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleLogin}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.loginButtonText}>ENTRAR</Text>
+          </TouchableOpacity>
+
+          <View style={styles.linksRow}>
+            <TouchableOpacity onPress={handleCadastrar}>
+              <Text style={styles.linkText}>Cadastrar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleEsqueceuSenha}>
+              <Text style={styles.linkText}>Esqueceu a senha?</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.quickAccess}>
+          <Text style={styles.quickAccessText}>Acesso rápido com:</Text>
+          <TouchableOpacity
+            style={styles.googleButton}
+            onPress={handleGoogle}
+            activeOpacity={0.85}
+          >
+            <AntDesign name="google" size={22} color="#DB4437" />
+            <Text style={styles.googleButtonText}>Google</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: '#140A26',
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
+  content: {
+    flexGrow: 1,
     justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    paddingHorizontal: 20,
+    paddingVertical: 32,
   },
   title: {
+    color: '#FFFFFF',
+    fontSize: 30,
+    fontWeight: '900',
     textAlign: 'center',
+    marginBottom: 32,
+    letterSpacing: 0.5,
   },
-  code: {
-    textTransform: 'uppercase',
+  form: {
+    width: '100%',
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  label: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '800',
+    marginBottom: 6,
+  },
+  labelSpacing: {
+    marginTop: 16,
+  },
+  input: {
+    height: 40,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 15,
+    color: '#000000',
+  },
+  loginButton: {
+    marginTop: 32,
+    height: 44,
+    backgroundColor: '#FF6A00',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 1,
+  },
+  linksRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  linkText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  quickAccess: {
+    marginTop: 32,
+    alignItems: 'center',
+  },
+  quickAccessText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  googleButton: {
+    width: '100%',
+    height: 44,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  googleButtonText: {
+    color: '#000000',
+    fontSize: 15,
+    fontWeight: '800',
   },
 });

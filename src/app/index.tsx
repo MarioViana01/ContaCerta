@@ -25,14 +25,14 @@ export default function LoginScreen() {
   };
 
   const handleCadastrar = () => {
-    router.push('/cadastro');
+       router.push('/cadastro');
   };
 
   const handleEsqueceuSenha = () => {
     // Quando criar a tela de recuperação:
-    // router.push('/recuperar-senha');
+    // router.push('/esqueceu a senha?');
 
-    console.log('Recuperar senha');
+    console.log('Esqueceu a senha?');
   };
 
   const handleGoogle = () => {

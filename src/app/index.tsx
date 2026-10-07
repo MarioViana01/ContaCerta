@@ -19,24 +19,40 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
+  // =========================
+  // LOGIN
+  // =========================
   const handleLogin = () => {
-    // TODO: chamar sua API / Firebase aqui
+    if (!email.trim() || !senha.trim()) {
+      console.log('Preencha o e-mail e a senha.');
+      return;
+    }
+
+    // TODO:
+    // Aqui futuramente vamos conectar Firebase/API.
     console.log('Login:', email, senha);
   };
 
+  // =========================
+  // CADASTRO
+  // =========================
   const handleCadastrar = () => {
-       router.push('/cadastro');
+    router.push('/cadastro');
   };
 
+  // =========================
+  // RECUPERAR SENHA
+  // =========================
   const handleEsqueceuSenha = () => {
-    // Quando criar a tela de recuperação:
-    // router.push('/esqueceu a senha?');
-
-    console.log('Esqueceu a senha?');
+    router.push('/recuperar-senha');
   };
 
+  // =========================
+  // LOGIN GOOGLE
+  // =========================
   const handleGoogle = () => {
-    // TODO: login com Google
+    // TODO:
+    // Implementar login com Google.
     console.log('Login com Google');
   };
 
@@ -53,12 +69,25 @@ export default function LoginScreen() {
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>BEM-VINDO</Text>
 
+        {/* =========================
+            TÍTULO
+        ========================= */}
+        <Text style={styles.title}>
+          BEM-VINDO
+        </Text>
+
+        {/* =========================
+            FORMULÁRIO
+        ========================= */}
         <View style={styles.form}>
-          {/* EMAIL */}
-          <Text style={styles.label}>Email</Text>
+
+          {/* E-MAIL */}
+          <Text style={styles.label}>
+            Email
+          </Text>
 
           <TextInput
             style={styles.input}
@@ -67,8 +96,10 @@ export default function LoginScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            textContentType="emailAddress"
             placeholder="Digite seu email"
             placeholderTextColor="#777"
+            returnKeyType="next"
           />
 
           {/* SENHA */}
@@ -82,8 +113,12 @@ export default function LoginScreen() {
             onChangeText={setSenha}
             secureTextEntry
             autoCapitalize="none"
+            autoCorrect={false}
+            textContentType="password"
             placeholder="Digite sua senha"
             placeholderTextColor="#777"
+            returnKeyType="done"
+            onSubmitEditing={handleLogin}
           />
 
           {/* BOTÃO ENTRAR */}
@@ -97,8 +132,12 @@ export default function LoginScreen() {
             </Text>
           </TouchableOpacity>
 
-          {/* LINKS */}
+          {/* =========================
+              LINKS
+          ========================= */}
           <View style={styles.linksRow}>
+
+            {/* CADASTRAR */}
             <TouchableOpacity
               onPress={handleCadastrar}
               activeOpacity={0.7}
@@ -108,6 +147,7 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
 
+            {/* RECUPERAR SENHA */}
             <TouchableOpacity
               onPress={handleEsqueceuSenha}
               activeOpacity={0.7}
@@ -116,11 +156,15 @@ export default function LoginScreen() {
                 Esqueceu a senha?
               </Text>
             </TouchableOpacity>
+
           </View>
         </View>
 
-        {/* ACESSO GOOGLE */}
+        {/* =========================
+            ACESSO GOOGLE
+        ========================= */}
         <View style={styles.quickAccess}>
+
           <Text style={styles.quickAccessText}>
             Acesso rápido com:
           </Text>
@@ -140,16 +184,18 @@ export default function LoginScreen() {
               Google
             </Text>
           </TouchableOpacity>
+
         </View>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
+/* =========================
+   ESTILOS
+========================= */
 
-
-
-/*css*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -188,6 +234,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
+    width: '100%',
     height: 40,
     backgroundColor: '#D9D9D9',
     borderRadius: 8,
@@ -197,8 +244,9 @@ const styles = StyleSheet.create({
   },
 
   loginButton: {
-    marginTop: 32,
+    width: '100%',
     height: 44,
+    marginTop: 32,
     backgroundColor: '#FF6A00',
     borderRadius: 8,
     alignItems: 'center',
@@ -225,6 +273,7 @@ const styles = StyleSheet.create({
   },
 
   quickAccess: {
+    width: '100%',
     marginTop: 32,
     alignItems: 'center',
   },

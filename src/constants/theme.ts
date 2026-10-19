@@ -24,7 +24,7 @@ export const lightTheme: ThemeColors = {
 };
 
 export const darkTheme: ThemeColors = {
-  background: '#121214',
+  background: '#120924',
   cardBackground: '#1E1E24',
   textPrimary: '#FFFFFF',
   textSecondary: '#9CA3AF',

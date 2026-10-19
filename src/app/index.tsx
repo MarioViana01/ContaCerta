@@ -1,72 +1,79 @@
 // src/app/index.tsx
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
-import { BankAccount, fetchConnectedBanks } from '../services/bankApi';
 
-export default function HomeScreen() {
-  const { theme, toggleTheme, isDarkMode } = useTheme();
-  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+export default function LoginScreen() {
+  const { theme } = useTheme();
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
-  useEffect(() => {
-    loadAccounts();
-  }, []);
-
-  const loadAccounts = async () => {
-    setLoading(true);
-    const data = await fetchConnectedBanks('user_123');
-    setBankAccounts(data);
-    setLoading(false);
+  const handleLogin = () => {
+    // Simula validação e redireciona para a Home dentro das abas logadas
+ router.replace('/explore');
   };
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={styles.header}>
-        <View>
-          <Text style={[styles.greeting, { color: theme.textSecondary }]}>Olá, Joao</Text>
-          <Text style={[styles.totalLabel, { color: theme.textSecondary }]}>Total</Text>
-          <Text style={[styles.totalValue, { color: theme.textPrimary }]}>R$ 3.230,23</Text>
-        </View>
-        <View style={styles.headerActions}>
-          <TouchableOpacity onPress={toggleTheme} style={styles.iconBtn}>
-            <Ionicons name={isDarkMode ? 'sunny-outline' : 'moon-outline'} size={24} color={theme.textPrimary} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconBtn}>
-            <Ionicons name="notifications-outline" size={24} color={theme.textPrimary} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <View style={styles.content}>
+        <Text style={[styles.title, { color: theme.textPrimary }]}>BEM-VINDO</Text>
 
-      <View style={[styles.cardContainer, { backgroundColor: theme.primary }]}>
-        <Text style={styles.cardTitle}>Contas Conectadas</Text>
-        {loading ? (
-          <ActivityIndicator color="#FFF" size="small" />
-        ) : (
-          bankAccounts.map((account) => (
-            <View key={account.id} style={styles.bankRow}>
-              <Text style={styles.bankName}>{account.bankName}</Text>
-              <Text style={styles.bankBalance}>R$ {account.balance.toFixed(2)}</Text>
-            </View>
-          ))
-        )}
+        <Text style={[styles.label, { color: theme.textSecondary }]}>Email</Text>
+        <TextInput 
+          style={[styles.input, { backgroundColor: theme.cardBackground, color: theme.textPrimary }]}
+          placeholder="Seu e-mail"
+          placeholderTextColor={theme.inputPlaceholder}
+          value={email}
+          onChangeText={setEmail}
+        />
+
+        <Text style={[styles.label, { color: theme.textSecondary }]}>Senha</Text>
+        <TextInput 
+          style={[styles.input, { backgroundColor: theme.cardBackground, color: theme.textPrimary }]}
+          placeholder="Sua senha"
+          placeholderTextColor={theme.inputPlaceholder}
+          secureTextEntry
+          value={senha}
+          onChangeText={setSenha}
+        />
+
+        <TouchableOpacity style={[styles.btnEntrar, { backgroundColor: theme.primary }]} onPress={handleLogin}>
+          <Text style={styles.btnText}>ENTRAR</Text>
+        </TouchableOpacity>
+
+        <View style={styles.footerLinks}>
+          <TouchableOpacity onPress={() => router.push('/cadastro')}>
+            <Text style={[styles.linkText, { color: theme.textSecondary }]}>Cadastrar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/recuperar-senha')}>
+            <Text style={[styles.linkText, { color: theme.textSecondary }]}>Esqueceu a senha?</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={[styles.quickAccess, { color: theme.textSecondary }]}>Acesso rápido com:</Text>
+        <TouchableOpacity style={[styles.googleBtn, { backgroundColor: theme.cardBackground }]}>
+          <Ionicons name="logo-google" size={20} color={theme.textPrimary} />
+          <Text style={[styles.googleText, { color: theme.textPrimary }]}>Google</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 20 },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 40 },
-  headerActions: { flexDirection: 'row', gap: 12 },
-  iconBtn: { padding: 4 },
-  greeting: { fontSize: 18, fontWeight: 'bold' },
-  totalLabel: { fontSize: 14, marginTop: 10 },
-  totalValue: { fontSize: 28, fontWeight: 'bold' },
-  cardContainer: { borderRadius: 16, padding: 20, marginTop: 24, minHeight: 180 },
-  cardTitle: { color: '#FFF', fontSize: 16, fontWeight: 'bold', marginBottom: 16 },
-  bankRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
-  bankName: { color: '#FFF', fontSize: 14 },
-  bankBalance: { color: '#FFF', fontSize: 14, fontWeight: 'bold' },
+  container: { flex: 1, padding: 24 },
+  content: { marginTop: 60, alignItems: 'center' },
+  title: { fontSize: 26, fontWeight: 'bold', marginBottom: 40 },
+  label: { alignSelf: 'flex-start', fontSize: 14, marginBottom: 6 },
+  input: { width: '100%', height: 50, borderRadius: 8, paddingHorizontal: 16, marginBottom: 16, fontSize: 14 },
+  btnEntrar: { width: '100%', height: 50, borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 },
+  btnText: { color: '#FFF', fontWeight: 'bold', fontSize: 16 },
+  footerLinks: { width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30 },
+  linkText: { fontSize: 14 },
+  quickAccess: { fontSize: 12, marginBottom: 12 },
+  googleBtn: { width: '100%', height: 48, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 },
+  googleText: { fontWeight: 'bold', fontSize: 14 }
 });

@@ -1,6 +1,8 @@
 // src/context/ThemeContext.tsx
 import React, { createContext, ReactNode, useContext, useState } from 'react';
-import { darkTheme, lightTheme, ThemeColors } from '../constants/theme';
+// No arquivo src/context/ThemeContext.tsx, verifique se está assim:
+import { darkTheme, lightTheme, ThemeColors } from '../Styles/theme';
+// (Note o 'S' maiúsculo correspondente ao nome da sua pasta)
 
 interface ThemeContextData {
   theme: ThemeColors;

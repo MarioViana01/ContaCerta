@@ -42,3 +42,7 @@ export const Spacing = {
   lg: 24,
   xl: 32,
 };
+
+export const BottomTabInset = 60;
+
+export const MaxContentWidth = 960;

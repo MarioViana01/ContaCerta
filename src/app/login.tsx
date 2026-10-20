@@ -2,8 +2,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from '../../context/ThemeContext';
-import { BankAccount, fetchConnectedBanks } from '../../services/bankApi';
+import { useTheme } from '../context/ThemeContext';
+import { BankAccount, fetchConnectedBanks } from '../services/bankApi';
+;
 
 export default function HomeScreen() {
   const { theme, toggleTheme, isDarkMode } = useTheme();

@@ -1,14 +1,12 @@
-/**
- * Learn more about light and dark modes:
- * https://docs.expo.dev/guides/color-schemes/
- */
+import { useTheme as useAppTheme } from '../context/ThemeContext';
 
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
+// Mantém a compatibilidade com telas antigas do template Expo.
+// As telas novas devem continuar usando ThemeContext diretamente.
 export function useTheme() {
-  const scheme = useColorScheme();
-  const theme = scheme === 'unspecified' ? 'light' : scheme;
+  const { theme } = useAppTheme();
 
-  return Colors[theme];
+  return {
+    ...theme,
+    text: theme.textPrimary,
+  };
 }
